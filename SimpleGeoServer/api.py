@@ -1,8 +1,10 @@
 import flask
 from flask import request, jsonify
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+cors = CORS(app)
 
 #http://164.8.252.95/geoserver/gis/wms?
 #BBOX=346681.25,10081.25,633400,2114,>56.25&
@@ -17,15 +19,15 @@ app.config["DEBUG"] = True
 
 @app.route('/geoserver/gis/wms', methods=['GET'])
 def wmsRequest():
-    boundingBox = NULL
-    styles = NULL
-    format = NULL
-    request = NULL
-    version = NULL
-    layers = NULL
-    width = NULL
-    height = NULL
-    srs = NULL
+    boundingBox = ''
+    styles = ''
+    format = ''
+    req = ''
+    version = ''
+    layers = ''
+    width = ''
+    height = ''
+    srs = ''
 
     if 'BBOX' in request.args:
         boundingBox = request.args['BBOX']
@@ -41,7 +43,7 @@ def wmsRequest():
         return "Format parameter is required!"
 
     if 'REQUEST' in request.args:
-        request = request.args['REQUEST']
+        req = request.args['REQUEST']
     else:
         return "Request parameter is required!"
 
@@ -70,6 +72,10 @@ def wmsRequest():
     else:
         return "SRS parameter is required!"
 
+    print("\n");
     print(request);
+    print("\n");
+
+    return "Good request!";
 
 app.run()
