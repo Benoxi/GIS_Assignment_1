@@ -1,6 +1,8 @@
 import flask
 from flask import request, jsonify
 from flask_cors import CORS
+from PIL import Image
+import numpy
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -17,6 +19,21 @@ cors = CORS(app)
 # HEIGHT=521&
 # SRS=EPSG:2170
 
+def getImageByLayer(layer):
+    location = "rester/PK1000_"
+    img = Image.open(location)
+    imgArray = numpy.array(img)
+    imgArray.shape
+    img.show()
+    return 0
+
+def getCapabilities():
+    return 0
+
+def cutImage(bBox, style, format, width, height, image):
+
+    return 0
+
 @app.route('/geoserver/gis/wms', methods=['GET'])
 def wmsRequest():
 
@@ -28,17 +45,27 @@ def wmsRequest():
     boundingBox = request.args['BBOX']
     styles = request.args['STYLES']
     format = request.args['FORMAT']
-    req = request.args['REQUEST']
-    version = request.args['VERSION']
-    layers = request.args['LAYERS']
+    req = request.args['REQUEST'] # GetMap or GetCapabilities
+    version = request.args['VERSION'] # Set for other GeoServer
+    layers = request.args['LAYERS'] #! TODO: Test if multiple variables create array?
     width = request.args['WIDTH']
     height = request.args['HEIGHT']
-    srs = request.args['SRS']
+    srs = request.args['SRS'] # Ignore
 
-    print("\n")
-    print(request)
-    print("\n")
+    if req != "GetMap" or req != "GetCapabilities":
+            return jsonify("Request parameter is invalid, only ['GetMap', 'GetCapabilities'] are valid values"), 422
+    elif req == "GetMap":
+        if "RS" in layers or "RSI" in layers or "ZDR" in layers :
+            image = getImageByLayer(layers)
+            resposne = cutImage(boundingBox, styles, format, width, height, image)
+        else: # Send request forward!
+            response = "Not yet imeplemented!"
+    else:
+        getCapabilities()
 
     return "Good request!"
 
 app.run()
+
+#getImageByLayer("RS")
+

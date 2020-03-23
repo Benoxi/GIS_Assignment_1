@@ -5,19 +5,15 @@
             <a href="http://www.typescriptlang.org/" target="_blank">TypeScript</a>.
         </p>
         <v-card>
-            <v-card-title>GeoServer Client</v-card-title>
+            <v-card-title class="pb-0">GeoServer Client</v-card-title>
             <v-form @submit.prevent="onSubmit">
                 <v-card-text>
                     <v-text-field v-model="bBox" label="Bounding Box"></v-text-field>
-                    <v-text-field v-model="styles" label="Stlyes"></v-text-field>
+                    <v-text-field v-model="styles" label="Styles"></v-text-field>
                     <v-text-field v-model="format" label="Format"></v-text-field>
-                    <v-select
-                        v-model="request"
-                        :items="['GetMap', 'GetCapabilities']"
-                        label="Request"
-                    ></v-select>
+                    <v-select v-model="request" :items="['GetMap', 'GetCapabilities']" label="Request"></v-select>
                     <v-text-field v-model="version" label="Version"></v-text-field>
-                    <v-text-field v-model="layers" label="Layers"></v-text-field>
+                    <v-text-field v-model="layers" label="Layers" hint="Please enter values divided by commas"></v-text-field>
                     <v-text-field v-model="width" label="Width"></v-text-field>
                     <v-text-field v-model="height" label="Height"></v-text-field>
                     <v-text-field v-model="srs" label="SRS"></v-text-field>
@@ -42,11 +38,11 @@ export default class Home extends Vue {
     styles: string = "";
     format: string = "";
     request: string = "GetMap";
-    version: string = "1.1.1";
+    version: string = "1.0.0";
     layers: string = "";
     width: number = 1280;
     height: number = 720;
-    srs: string = "EPSG:2170";
+    srs: string = "XXX";
 
     async onSubmit() {
         try {
