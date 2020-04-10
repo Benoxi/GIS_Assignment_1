@@ -12,7 +12,6 @@
                     <v-text-field v-model="styles" label="Styles"></v-text-field>
                     <v-text-field v-model="format" label="Format"></v-text-field>
                     <v-select v-model="request" :items="['GetMap', 'GetCapabilities']" label="Request"></v-select>
-                    <v-text-field v-model="version" label="Version"></v-text-field>
                     <v-text-field v-model="layers" label="Layers" hint="Please enter values divided by commas"></v-text-field>
                     <v-text-field v-model="width" label="Width"></v-text-field>
                     <v-text-field v-model="height" label="Height"></v-text-field>
@@ -34,15 +33,14 @@ import axios from "axios";
 
 @Component
 export default class Home extends Vue {
-    bBox: string = "";
+    bBox: string = "547631.6237364038,157484.86830455417,549631.7865026393,159485.0310707898";
     styles: string = "";
-    format: string = "";
+    format: string = "image/png";
     request: string = "GetMap";
-    version: string = "1.0.0";
-    layers: string = "";
-    width: number = 1280;
-    height: number = 720;
-    srs: string = "XXX";
+    layers: string = "gis:P100004,gis:P100051,gis:P100052";
+    width: number = 767;
+    height: number = 768;
+    srs: string = "XXX"
 
     async onSubmit() {
         try {
@@ -54,11 +52,10 @@ export default class Home extends Vue {
                         STYLES: this.styles,
                         FORMAT: this.format,
                         REQUEST: this.request,
-                        VERSION: this.version,
                         LAYERS: this.layers,
                         WIDTH: this.width,
                         HEIGHT: this.height,
-                        SRS: this.srs
+                        SRS: this.srs,
                     }
                 }
             );
