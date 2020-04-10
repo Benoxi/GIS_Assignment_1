@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from flask_cors import CORS
 # from PIL import Image
 import cv2
@@ -31,6 +31,8 @@ class GeoImage:
 
     def cropImage(self, x1, y1, x2, y2):
         self.croppedImage = self.tifImage[y1:y2, x1:x2]
+
+#http://164.8.252.95/geoserver/gis/wms?BBOX=346681.25,100810.25,633400,211456.25&STYLES=&FORMAT=image/png&REQUEST=GetMap&VERSION=1.1.1&LAYERS=gis:P100004&WIDTH=800&HEIGHT=521&SRS=EPSG:2170
 
 
 def validateBoundingBox(bBox, geoImage):
@@ -83,9 +85,15 @@ def cutImage(bBox, image):
     return image
 
 def formatImage(image, format, width, height):
-    cv2.imshow("image", image)
+    #cv2.imshow("image", image)
+    newImage = cv2.resize(image, (int(width), int(height)))#, interpolation = cv2.INTER_AREA)
 
-    return 0
+    formatEnding = format.split("/")[1];
+    imageFileName = "result." + formatEnding
+
+    cv2.imwrite(imageFileName, newImage);
+
+    return imageFileName
 
 def prepareImage(bBox, format, width, height, images):
     i = 0
@@ -98,9 +106,9 @@ def prepareImage(bBox, format, width, height, images):
 
         i += 1
 
-    responseImage = formatImage(layerdImage, format, width, height)
+    responseImageName = formatImage(layerdImage, format, width, height)
 
-    return responseImage
+    return responseImageName
 
 @app.route('/geoserver/gis/wms', methods=['GET'])
 def wmsRequest():
@@ -129,7 +137,8 @@ def wmsRequest():
             images = getImageByLayer(layers)
             # Validate bBox params
             if validateBoundingBox(boundingBox, images[0]):
-                response = prepareImage(boundingBox, format, width, height, images)
+                fileName = prepareImage(boundingBox, format, width, height, images)
+                return send_file(fileName, mimetype=format)
             else:
                 # Create "bbox out of bounds error message"
                 return 0

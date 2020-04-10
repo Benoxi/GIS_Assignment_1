@@ -33,7 +33,7 @@ import axios from "axios";
 
 @Component
 export default class Home extends Vue {
-    bBox: string = "547631.6237364038,157484.86830455417,549631.7865026393,159485.0310707898";
+    bBox: string = "540631.6237364038,120484.86830455417,570631.7865026393,165485.0310707898";
     styles: string = "";
     format: string = "image/png";
     request: string = "GetMap";
